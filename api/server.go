@@ -60,17 +60,16 @@ func (server *Server) setupRouter() {
 		user.POST("/login", server.login)
 		user.POST("/renew-access-token", server.renewAccessToken)
 	}
-	//router.POST("/users", server.createUser)
-	//router.POST("/login", server.login)
-	//router.GET("/list/:page", server.getScrapedList)
-	//router.GET("/search", server.search)
-	//router.POST("/filter", server.filter)
-	//
-	//scrape := router.Group("/scrape").Use(authMiddleware(server.tokenMaker))
-	//{
-	//	scrape.POST("/create", server.createScrapping)
-	//	scrape.GET(":page", server.getOwnScrapedList)
-	//}
+	country := router.Group("/country")
+	{
+		country.GET("/add", server.getCountryByAPI)
+		country.GET("/list", server.getCountriesList)
+	}
+
+	state := router.Group("/state")
+	{
+		state.GET("/add", server.getCountryByAPI)
+	}
 	//swager route
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFile.Handler))
 	//server route

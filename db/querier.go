@@ -12,6 +12,8 @@ type Querier interface {
 	GetUserById(ctx context.Context, userid int32) (models.User, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (models.Sessions, error)
 	GetSession(ctx context.Context, id uuid.UUID) (models.Sessions, error)
+	AddCountry(ctx context.Context, arg AddCountryParams) (models.Country, error)
+	GetCountriesList(ctx context.Context) ([]models.Country, error)
 }
 
 var _ Querier = (*Queries)(nil)
