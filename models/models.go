@@ -24,9 +24,10 @@ type Sessions struct {
 }
 
 type Country struct {
-	ID          int       `json:"id"`
-	CountryName string    `json:"countryName" `
-	CreatedAt   time.Time `json:"createdAt" `
+	ID               int       `json:"id"`
+	Name             string    `json:"name" `
+	CountryShortName string    `json:"country_short_name"`
+	CreatedAt        time.Time `json:"createdAt" `
 }
 
 type State struct {

@@ -2,7 +2,8 @@
 -- +goose StatementBegin
 CREATE TABLE "country" (
  "id" serial PRIMARY KEY,
- "country_name" varchar NOT NULL UNIQUE,
+ "name" varchar NOT NULL UNIQUE,
+ "country_short_name" varchar ,
  "created_at" Date NOT NULL DEFAULT now()
 );
 -- +goose StatementEnd

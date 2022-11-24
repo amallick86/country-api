@@ -10,6 +10,13 @@ definitions:
       message:
         type: string
     type: object
+  api.countriesListResponse:
+    properties:
+      countries:
+        items:
+          $ref: '#/definitions/models.Country'
+        type: array
+    type: object
   api.createAccountRequest:
     properties:
       password:
@@ -70,12 +77,74 @@ definitions:
       access_token_expires_at:
         type: string
     type: object
+  api.successResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Country:
+    properties:
+      country_short_name:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
   title: Country API
   version: "1.0"
 paths:
+  /country/add:
+    get:
+      consumes:
+      - application/json
+      operationId: getCountryByAPI
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.successResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Err'
+      summary: Save country data to database by fetching from third party api
+      tags:
+      - Country
+  /country/list:
+    get:
+      consumes:
+      - application/json
+      operationId: getCountriesList
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.countriesListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Err'
+      summary: get countries list
+      tags:
+      - Country
   /hello:
     get:
       operationId: Hello
