@@ -11,9 +11,9 @@ swagger:
 migcrt:
 		goose -dir ./db/migration/ create table_name sql
 gooseup:
-		goose -dir ./db/migration/ -v postgres "postgres://root:root123@localhost:5432/country?sslmode=disable" up
+		goose -dir ./db/migration/ -v postgres "postgres://root:root123@localhost:5432/countrydb?sslmode=disable" up
 goosedown:
-		goose -dir ./db/migration/ -v postgres "postgres://root:root123@localhost:5432/country?sslmode=disable" down
+		goose -dir ./db/migration/ -v postgres "postgres://root:root123@localhost:5432/countrydb?sslmode=disable" down
 
 
 .PHONY: dcup dcdb dcdown drmi swagger migcrt gooseup goosedown

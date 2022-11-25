@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"net/http"
+	"strconv"
+
 	"github.com/amallick86/country-api/db"
 	"github.com/amallick86/country-api/models"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 type getCountriesList struct {
@@ -26,6 +27,7 @@ type successResponse struct {
 // @ID getCountryByAPI
 // @Accept json
 // @Produce json
+// @Security bearerAuth
 // @Success 201 {object} successResponse
 // @Failure 400 {object} Err
 // @Failure 500 {object} Err
@@ -89,6 +91,7 @@ type countriesListResponse struct {
 // @Accept json
 // @Produce json
 // @Param        page   path      int  true  "page"
+// @Security bearerAuth
 // @Success 200 {object} countriesListResponse
 // @Failure 400 {object} Err
 // @Failure 500 {object} Err

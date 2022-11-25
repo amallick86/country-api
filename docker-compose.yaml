@@ -1,15 +1,13 @@
-
 version: "3.9"
 services:
   postgres:
-    image: postgres
+    image: postgres:14-alpine
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root123
-      - POSTGRES_DB=country
-
+      - POSTGRES_DB=countrydb
   api:
     build:
       context: .
@@ -17,7 +15,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_SOURCE=postgres://root:root123@postgres:5432/country?sslmode=disable
+      - DB_SOURCE=postgres://root:root123@postgres:5432/countrydb?sslmode=disable
     depends_on:
       - postgres
     entrypoint: ["/app/wait-for.sh", "postgres:5432", "--","/app/start.sh"]

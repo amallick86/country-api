@@ -4,12 +4,13 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"github.com/amallick86/country-api/db"
-	"github.com/amallick86/country-api/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/amallick86/country-api/db"
+	"github.com/amallick86/country-api/models"
+	"github.com/gin-gonic/gin"
 )
 
 type getStateList struct {
@@ -29,6 +30,7 @@ type getStateList struct {
 // @ID getStateByAPI
 // @Accept json
 // @Produce json
+// @Security bearerAuth
 // @Success 201 {object} successResponse
 // @Failure 400 {object} Err
 // @Failure 500 {object} Err
@@ -79,6 +81,7 @@ type stateListResponse struct {
 // @Accept json
 // @Produce json
 // @Param        page   path      int  true  "page"
+// @Security bearerAuth
 // @Success 200 {object} stateListResponse
 // @Failure 400 {object} Err
 // @Failure 500 {object} Err
@@ -134,6 +137,7 @@ type stateListResponseByCountry struct {
 // @Accept json
 // @Produce json
 // @Param        country   path      string  true  "country name"
+// @Security bearerAuth
 // @Success 200 {object} stateListResponseByCountry
 // @Failure 400 {object} Err
 // @Failure 500 {object} Err
