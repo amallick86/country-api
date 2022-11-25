@@ -77,6 +77,20 @@ definitions:
       access_token_expires_at:
         type: string
     type: object
+  api.stateListResponse:
+    properties:
+      states:
+        items:
+          $ref: '#/definitions/models.State'
+        type: array
+    type: object
+  api.stateListResponseByCountry:
+    properties:
+      states:
+        items:
+          $ref: '#/definitions/models.State'
+        type: array
+    type: object
   api.successResponse:
     properties:
       message:
@@ -91,6 +105,19 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+    type: object
+  models.State:
+    properties:
+      countryId:
+        type: integer
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      stateName:
         type: string
     type: object
 host: localhost:8080
@@ -158,6 +185,81 @@ paths:
       summary: print hello world
       tags:
       - Hello
+  /state/add:
+    get:
+      consumes:
+      - application/json
+      operationId: getStateByAPI
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.successResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Err'
+      summary: Save state data to database by fetching from third party api
+      tags:
+      - State
+  /state/country-state/{country}:
+    get:
+      consumes:
+      - application/json
+      operationId: StateByCountry
+      parameters:
+      - description: country name
+        in: path
+        name: country
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.stateListResponseByCountry'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Err'
+      summary: Get states by the country name
+      tags:
+      - State
+  /state/list:
+    get:
+      consumes:
+      - application/json
+      operationId: getStatesList
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.stateListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.Err'
+      summary: get states list
+      tags:
+      - State
   /user/create:
     post:
       consumes:

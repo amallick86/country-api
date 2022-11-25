@@ -33,6 +33,7 @@ type Country struct {
 type State struct {
 	ID        int       `json:"id"`
 	CountryId int       `json:"countryId"`
+	Name      string    `json:"name" `
 	StateName string    `json:"stateName" `
 	CreatedAt time.Time `json:"createdAt" `
 }
