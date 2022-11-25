@@ -3,10 +3,12 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"github.com/amallick86/country-api/db"
 	"github.com/amallick86/country-api/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type getCountriesList struct {
@@ -58,9 +60,26 @@ func (server *Server) getCountryByAPI(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, successResponse{Message: "Data is Successfully saved in database"})
 }
+func mapTotalPage(p, pageItemValue int) []int {
+	var totalPage []int
+
+	rem := p % pageItemValue
+	limit := p / pageItemValue
+	if rem > 0 {
+		limit = limit + 1
+	}
+	for i := 1; i <= limit; i++ {
+		totalPage = append(totalPage, i)
+	}
+	return totalPage
+}
 
 type countriesListResponse struct {
-	Countries []models.Country `json:"countries"`
+	TotalCountry      int              `json:"totalCountry"`
+	ItemInASinglePage int              `json:"itemInASinglePage"`
+	CurrentIndex      int              `json:"currentIndex"`
+	TotalPageList     []int            `json:"totalPageList"`
+	Countries         []models.Country `json:"countries"`
 }
 
 // fetch countries List
@@ -69,12 +88,27 @@ type countriesListResponse struct {
 // @ID getCountriesList
 // @Accept json
 // @Produce json
+// @Param        page   path      int  true  "page"
 // @Success 200 {object} countriesListResponse
 // @Failure 400 {object} Err
 // @Failure 500 {object} Err
-// @Router /country/list [get]
+// @Router /country/list/{page} [get]
 func (server *Server) getCountriesList(ctx *gin.Context) {
-	response, err := server.store.GetCountriesList(ctx)
+	pageItemValue := 15
+	pageString := ctx.Param("page")
+	pageInt, err := strconv.Atoi(pageString)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	if pageInt <= 0 {
+		ctx.JSON(http.StatusBadRequest, errorResponse(errors.New("-ve and 0 page are not valid")))
+		return
+	}
+	response, err := server.store.GetCountriesList(ctx, db.GetCountriesListParams{
+		FromId: (pageInt * pageItemValue) - (pageItemValue - 1),
+		Limit:  pageItemValue,
+	})
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -83,8 +117,18 @@ func (server *Server) getCountriesList(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+	totalCountryCount, err := server.store.GetTotalCountryCount(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	TotalPageList := mapTotalPage(totalCountryCount.TotalCountryCount, pageItemValue)
 	resp := countriesListResponse{
-		Countries: response,
+		TotalCountry:      totalCountryCount.TotalCountryCount,
+		ItemInASinglePage: pageItemValue,
+		CurrentIndex:      pageInt,
+		TotalPageList:     TotalPageList,
+		Countries:         response,
 	}
 	ctx.JSON(http.StatusOK, resp)
 }

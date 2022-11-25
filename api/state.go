@@ -3,10 +3,12 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"github.com/amallick86/country-api/db"
 	"github.com/amallick86/country-api/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -63,7 +65,11 @@ func (server *Server) getStateByAPI(ctx *gin.Context) {
 }
 
 type stateListResponse struct {
-	Sates []models.State `json:"states"`
+	Sates             []models.State `json:"states"`
+	TotalState        int            `json:"totalState"`
+	ItemInASinglePage int            `json:"itemInASinglePage"`
+	CurrentIndex      int            `json:"currentIndex"`
+	TotalPageList     []int          `json:"totalPageList"`
 }
 
 // fetch states List
@@ -72,12 +78,27 @@ type stateListResponse struct {
 // @ID getStatesList
 // @Accept json
 // @Produce json
+// @Param        page   path      int  true  "page"
 // @Success 200 {object} stateListResponse
 // @Failure 400 {object} Err
 // @Failure 500 {object} Err
-// @Router /state/list [get]
+// @Router /state/list/{page} [get]
 func (server *Server) getStatesList(ctx *gin.Context) {
-	response, err := server.store.GetStateList(ctx)
+	pageItemValue := 10
+	pageString := ctx.Param("page")
+	pageInt, err := strconv.Atoi(pageString)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	if pageInt <= 0 {
+		ctx.JSON(http.StatusBadRequest, errorResponse(errors.New("-ve and 0 page are not valid")))
+		return
+	}
+	response, err := server.store.GetStateList(ctx, db.GetStateListParams{
+		FromId: (pageInt * pageItemValue) - (pageItemValue - 1),
+		Limit:  pageItemValue,
+	})
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -86,8 +107,18 @@ func (server *Server) getStatesList(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+	totalStateCount, err := server.store.GetTotalStateCount(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	TotalPageList := mapTotalPage(totalStateCount.TotalStateCount, pageItemValue)
 	resp := stateListResponse{
-		Sates: response,
+		Sates:             response,
+		TotalState:        totalStateCount.TotalStateCount,
+		ItemInASinglePage: pageItemValue,
+		CurrentIndex:      pageInt,
+		TotalPageList:     TotalPageList,
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
