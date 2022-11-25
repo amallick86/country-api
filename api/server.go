@@ -45,7 +45,6 @@ func (server *Server) setupRouter() {
 	docs.SwaggerInfo.Description = "Country API'S"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:8080"
-	//docs.SwaggerInfo.BasePath = "/api/v1"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	//cors middleware
@@ -60,13 +59,13 @@ func (server *Server) setupRouter() {
 		user.POST("/login", server.login)
 		user.POST("/renew-access-token", server.renewAccessToken)
 	}
-	country := router.Group("/country")
+	country := router.Group("/country").Use(authMiddleware(server.tokenMaker))
 	{
 		country.GET("/add", server.getCountryByAPI)
 		country.GET("/list/:page", server.getCountriesList)
 	}
 
-	state := router.Group("/state")
+	state := router.Group("/state").Use(authMiddleware(server.tokenMaker))
 	{
 		state.GET("/add", server.getStateByAPI)
 		state.GET("/list/:page", server.getStatesList)
