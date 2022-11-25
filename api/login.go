@@ -34,7 +34,7 @@ type loginResponse struct {
 }
 
 // Login handles request for user creation
-// @Summary login
+// @Summary login and generate token with JWT
 // @Tags User
 // @ID Login
 // @Accept json

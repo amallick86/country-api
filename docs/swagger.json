@@ -47,7 +47,7 @@
                 }
             }
         },
-        "/country/list": {
+        "/country/list/{page}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -60,6 +60,15 @@
                 ],
                 "summary": "get countries list",
                 "operationId": "getCountriesList",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -181,7 +190,7 @@
                 }
             }
         },
-        "/state/list": {
+        "/state/list/{page}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -194,6 +203,15 @@
                 ],
                 "summary": "get states list",
                 "operationId": "getStatesList",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -273,7 +291,7 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "login",
+                "summary": "login and generate token with JWT",
                 "operationId": "Login",
                 "parameters": [
                     {
@@ -380,6 +398,21 @@
                     "items": {
                         "$ref": "#/definitions/models.Country"
                     }
+                },
+                "currentIndex": {
+                    "type": "integer"
+                },
+                "itemInASinglePage": {
+                    "type": "integer"
+                },
+                "totalCountry": {
+                    "type": "integer"
+                },
+                "totalPageList": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -477,11 +510,26 @@
         "api.stateListResponse": {
             "type": "object",
             "properties": {
+                "currentIndex": {
+                    "type": "integer"
+                },
+                "itemInASinglePage": {
+                    "type": "integer"
+                },
                 "states": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.State"
                     }
+                },
+                "totalPageList": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "totalState": {
+                    "type": "integer"
                 }
             }
         },
@@ -507,7 +555,7 @@
         "models.Country": {
             "type": "object",
             "properties": {
-                "country_short_name": {
+                "countryShortName": {
                     "type": "string"
                 },
                 "createdAt": {

@@ -13,9 +13,11 @@ type Querier interface {
 	CreateSession(ctx context.Context, arg CreateSessionParams) (models.Sessions, error)
 	GetSession(ctx context.Context, id uuid.UUID) (models.Sessions, error)
 	AddCountry(ctx context.Context, arg AddCountryParams) (models.Country, error)
-	GetCountriesList(ctx context.Context) ([]models.Country, error)
+	GetTotalCountryCount(ctx context.Context) (models.CountryCount, error)
+	GetCountriesList(ctx context.Context, arg GetCountriesListParams) ([]models.Country, error)
 	AddState(ctx context.Context, arg AddStateParams) (models.State, error)
-	GetStateList(ctx context.Context) ([]models.State, error)
+	GetTotalStateCount(ctx context.Context) (models.StateCount, error)
+	GetStateList(ctx context.Context, arg GetStateListParams) ([]models.State, error)
 	GetStateListByCountry(ctx context.Context, arg GetStateListByCountryParams) ([]models.State, error)
 }
 

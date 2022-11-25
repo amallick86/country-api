@@ -23,11 +23,19 @@ type Sessions struct {
 	CreatedAt    time.Time `json:"createdAt"`
 }
 
+type CountryCount struct {
+	TotalCountryCount int `json:"totalCountryCount"`
+}
+
 type Country struct {
 	ID               int       `json:"id"`
 	Name             string    `json:"name" `
-	CountryShortName string    `json:"country_short_name"`
+	CountryShortName string    `json:"countryShortName"`
 	CreatedAt        time.Time `json:"createdAt" `
+}
+
+type StateCount struct {
+	TotalStateCount int `json:"totalStateCount"`
 }
 
 type State struct {

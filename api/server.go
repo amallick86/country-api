@@ -63,13 +63,13 @@ func (server *Server) setupRouter() {
 	country := router.Group("/country")
 	{
 		country.GET("/add", server.getCountryByAPI)
-		country.GET("/list", server.getCountriesList)
+		country.GET("/list/:page", server.getCountriesList)
 	}
 
 	state := router.Group("/state")
 	{
 		state.GET("/add", server.getStateByAPI)
-		state.GET("/list", server.getStatesList)
+		state.GET("/list/:page", server.getStatesList)
 		state.GET("/country-state/:country", server.stateByCountry)
 
 	}

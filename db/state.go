@@ -32,11 +32,29 @@ func (q *Queries) AddState(ctx context.Context, arg AddStateParams) (models.Stat
 	return i, err
 }
 
-const getStateList = `
-SELECT state.id,state_name,country_id,state.created_at,country.name FROM state INNER JOIN country ON country.id= state.country_id`
+const getTotalStateCount = `
+SELECT COUNT(*) FROM state
+`
 
-func (q *Queries) GetStateList(ctx context.Context) ([]models.State, error) {
-	rows, err := q.db.QueryContext(ctx, getStateList)
+func (q *Queries) GetTotalStateCount(ctx context.Context) (models.StateCount, error) {
+	row := q.db.QueryRowContext(ctx, getTotalStateCount)
+	var i models.StateCount
+	err := row.Scan(
+		&i.TotalStateCount,
+	)
+	return i, err
+}
+
+const getStateList = `
+SELECT state.id,state_name,country_id,state.created_at,country.name FROM state INNER JOIN country ON country.id= state.country_id where state.id >= $1 LIMIT $2`
+
+type GetStateListParams struct {
+	FromId int `json:"fromId"`
+	Limit  int `json:"limit"`
+}
+
+func (q *Queries) GetStateList(ctx context.Context, arg GetStateListParams) ([]models.State, error) {
+	rows, err := q.db.QueryContext(ctx, getStateList, arg.FromId, arg.Limit)
 	if err != nil {
 		return nil, err
 	}
