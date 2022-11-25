@@ -68,7 +68,10 @@ func (server *Server) setupRouter() {
 
 	state := router.Group("/state")
 	{
-		state.GET("/add", server.getCountryByAPI)
+		state.GET("/add", server.getStateByAPI)
+		state.GET("/list", server.getStatesList)
+		state.GET("/country-state/:country", server.stateByCountry)
+
 	}
 	//swager route
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFile.Handler))
