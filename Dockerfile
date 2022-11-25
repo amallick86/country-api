@@ -7,7 +7,7 @@ RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 RUN which goose
 
 #Run stage
-FROM alpine:3.14
+FROM alpine:3.16
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /go/bin/goose ./migrate
@@ -15,7 +15,6 @@ COPY app.env .
 COPY start.sh .
 COPY wait-for.sh .
 COPY db/migration ./migration
-
 
 EXPOSE 8080
 CMD [ "/app/main" ]

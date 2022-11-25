@@ -18,6 +18,11 @@ const docTemplate = `{
     "paths": {
         "/country/add": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -53,6 +58,11 @@ const docTemplate = `{
         },
         "/country/list/{page}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -117,6 +127,11 @@ const docTemplate = `{
         },
         "/state/add": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -152,6 +167,11 @@ const docTemplate = `{
         },
         "/state/country-state/{country}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -196,6 +216,11 @@ const docTemplate = `{
         },
         "/state/list/{page}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],

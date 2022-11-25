@@ -166,6 +166,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Err'
+      security:
+      - bearerAuth: []
       summary: Save country data to database by fetching from third party api
       tags:
       - Country
@@ -195,6 +197,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Err'
+      security:
+      - bearerAuth: []
       summary: get countries list
       tags:
       - Country
@@ -231,6 +235,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Err'
+      security:
+      - bearerAuth: []
       summary: Save state data to database by fetching from third party api
       tags:
       - State
@@ -260,6 +266,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Err'
+      security:
+      - bearerAuth: []
       summary: Get states by the country name
       tags:
       - State
@@ -289,6 +297,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/api.Err'
+      security:
+      - bearerAuth: []
       summary: get states list
       tags:
       - State
